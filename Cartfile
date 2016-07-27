@@ -1,2 +1,3 @@
 github "socketio/socket.io-client-swift" ~> 6.1.5 # Or latest versioni
 github "daltoniam/Starscream" >= 1.1.3
+github "facebook/SocketRocket"

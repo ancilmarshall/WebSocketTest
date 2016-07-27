@@ -12,9 +12,12 @@
 		1D6D4CBC1D48B85E000A0EAB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1D6D4CBA1D48B85E000A0EAB /* Main.storyboard */; };
 		1D6D4CBE1D48B85E000A0EAB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D6D4CBD1D48B85E000A0EAB /* Assets.xcassets */; };
 		1D6D4CC11D48B85E000A0EAB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1D6D4CBF1D48B85E000A0EAB /* LaunchScreen.storyboard */; };
-		1D6D4CCB1D48B98C000A0EAB /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6D4CCA1D48B98C000A0EAB /* WebSocketManager.swift */; };
+		1D6D4CCB1D48B98C000A0EAB /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6D4CCA1D48B98C000A0EAB /* SocketIOManager.swift */; };
 		1D6D4CD91D48DCFF000A0EAB /* SocketIOClientSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D6D4CD81D48DCFF000A0EAB /* SocketIOClientSwift.framework */; };
 		1D6D4CDA1D48DCFF000A0EAB /* SocketIOClientSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1D6D4CD81D48DCFF000A0EAB /* SocketIOClientSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1D6D4CDD1D48E2DD000A0EAB /* StarWebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6D4CDC1D48E2DD000A0EAB /* StarWebSocketManager.swift */; };
+		1D6D4CDF1D48E2FD000A0EAB /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D6D4CDE1D48E2FD000A0EAB /* Starscream.framework */; };
+		1D6D4CE01D48E2FD000A0EAB /* Starscream.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1D6D4CDE1D48E2FD000A0EAB /* Starscream.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +28,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				1D6D4CDA1D48DCFF000A0EAB /* SocketIOClientSwift.framework in Embed Frameworks */,
+				1D6D4CE01D48E2FD000A0EAB /* Starscream.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -39,8 +43,10 @@
 		1D6D4CBD1D48B85E000A0EAB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1D6D4CC01D48B85E000A0EAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1D6D4CC21D48B85E000A0EAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1D6D4CCA1D48B98C000A0EAB /* WebSocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
+		1D6D4CCA1D48B98C000A0EAB /* SocketIOManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
 		1D6D4CD81D48DCFF000A0EAB /* SocketIOClientSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SocketIOClientSwift.framework; path = Carthage/Build/iOS/SocketIOClientSwift.framework; sourceTree = "<group>"; };
+		1D6D4CDC1D48E2DD000A0EAB /* StarWebSocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarWebSocketManager.swift; sourceTree = "<group>"; };
+		1D6D4CDE1D48E2FD000A0EAB /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +55,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D6D4CD91D48DCFF000A0EAB /* SocketIOClientSwift.framework in Frameworks */,
+				1D6D4CDF1D48E2FD000A0EAB /* Starscream.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,6 +65,7 @@
 		1D6D4CAA1D48B85E000A0EAB = {
 			isa = PBXGroup;
 			children = (
+				1D6D4CDE1D48E2FD000A0EAB /* Starscream.framework */,
 				1D6D4CD81D48DCFF000A0EAB /* SocketIOClientSwift.framework */,
 				1D6D4CB51D48B85E000A0EAB /* WebSocket */,
 				1D6D4CB41D48B85E000A0EAB /* Products */,
@@ -77,7 +85,8 @@
 			children = (
 				1D6D4CB61D48B85E000A0EAB /* AppDelegate.swift */,
 				1D6D4CB81D48B85E000A0EAB /* ViewController.swift */,
-				1D6D4CCA1D48B98C000A0EAB /* WebSocketManager.swift */,
+				1D6D4CCA1D48B98C000A0EAB /* SocketIOManager.swift */,
+				1D6D4CDC1D48E2DD000A0EAB /* StarWebSocketManager.swift */,
 				1D6D4CBA1D48B85E000A0EAB /* Main.storyboard */,
 				1D6D4CBD1D48B85E000A0EAB /* Assets.xcassets */,
 				1D6D4CBF1D48B85E000A0EAB /* LaunchScreen.storyboard */,
@@ -159,8 +168,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D6D4CB91D48B85E000A0EAB /* ViewController.swift in Sources */,
+				1D6D4CDD1D48E2DD000A0EAB /* StarWebSocketManager.swift in Sources */,
 				1D6D4CB71D48B85E000A0EAB /* AppDelegate.swift in Sources */,
-				1D6D4CCB1D48B98C000A0EAB /* WebSocketManager.swift in Sources */,
+				1D6D4CCB1D48B98C000A0EAB /* SocketIOManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,7 +290,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = WebSocket/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = ancilmarshall.WebSocket;
@@ -297,7 +307,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = WebSocket/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"OTHER_LDFLAGS[arch=*]" = "";
 				PRODUCT_BUNDLE_IDENTIFIER = ancilmarshall.WebSocket;

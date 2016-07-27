@@ -10,13 +10,12 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var socket = WebSocketManager.sharedInstance
+    var socket = SocketIOManager.sharedInstance
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         socket.establishConnection()
-        //socket.sendMessage("Hello")
+        socket.sendMessage("Hello")
         
     }
 

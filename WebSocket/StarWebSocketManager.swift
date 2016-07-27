@@ -1,5 +1,5 @@
 //
-//  WebSocketManager.swift
+//  StarWebSocketManager.swift
 //  WebSocket
 //
 //  Created by Ancil Marshall on 27/07/16.
@@ -7,15 +7,17 @@
 //
 
 import Foundation
-import SocketIOClientSwift
+import Starscream
 
-class WebSocketManager {
+
+class StarWebSocketManager {
     
-    static let sharedInstance = WebSocketManager()
-    var socket: SocketIOClient = SocketIOClient(socketURL: NSURL(string: "http://192.168.63.38:3000")!)
-    
-    
+    static let sharedInstance = StarWebSocketManager()
+    var socket = WebSocket(url: NSURL(string: "http://192.168.63.38:3000")!)
+    //var socket = WebSocket(url: NSURL(string: "http://62.210.217.219/openSocket")!)
+
     func establishConnection(){
+        socket.delegate = self
         socket.connect()
     }
     
@@ -24,29 +26,29 @@ class WebSocketManager {
     }
     
     func sendMessage(msg: String){
-//        socket.writeString(msg) { 
-//            "message written"
-//        }
+        socket.writeString(msg) { 
+            print("Message sent")
+        }
     }
 }
 
 
-extension WebSocketManager : WebSocketDelegate {
-    
+extension StarWebSocketManager : WebSocketDelegate {
+
     func websocketDidConnect(socket: WebSocket) {
         print("websocket is connected")
     }
-    
+
     func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
         print("websocket did disconnect")
     }
-    
+
     func websocketDidReceiveData(socket: WebSocket, data: NSData) {
         print("websocket did receive data")
     }
-    
+
     func websocketDidReceiveMessage(socket: WebSocket, text: String) {
         print("websockete did receive message")
     }
-    
+
 }
