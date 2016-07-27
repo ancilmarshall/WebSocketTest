@@ -13,8 +13,23 @@
 		1D6D4CBE1D48B85E000A0EAB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D6D4CBD1D48B85E000A0EAB /* Assets.xcassets */; };
 		1D6D4CC11D48B85E000A0EAB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1D6D4CBF1D48B85E000A0EAB /* LaunchScreen.storyboard */; };
 		1D6D4CCB1D48B98C000A0EAB /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6D4CCA1D48B98C000A0EAB /* WebSocketManager.swift */; };
-		1D6D4CCF1D48D9BC000A0EAB /* SocketIOClientSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D6D4CCE1D48D9BC000A0EAB /* SocketIOClientSwift.framework */; };
+		1D6D4CD91D48DCFF000A0EAB /* SocketIOClientSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D6D4CD81D48DCFF000A0EAB /* SocketIOClientSwift.framework */; };
+		1D6D4CDA1D48DCFF000A0EAB /* SocketIOClientSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1D6D4CD81D48DCFF000A0EAB /* SocketIOClientSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1D6D4CDB1D48DCFF000A0EAB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1D6D4CDA1D48DCFF000A0EAB /* SocketIOClientSwift.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1D6D4CB31D48B85E000A0EAB /* WebSocket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebSocket.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -25,7 +40,7 @@
 		1D6D4CC01D48B85E000A0EAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1D6D4CC21D48B85E000A0EAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1D6D4CCA1D48B98C000A0EAB /* WebSocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
-		1D6D4CCE1D48D9BC000A0EAB /* SocketIOClientSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SocketIOClientSwift.framework; path = Carthage/Build/iOS/SocketIOClientSwift.framework; sourceTree = "<group>"; };
+		1D6D4CD81D48DCFF000A0EAB /* SocketIOClientSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SocketIOClientSwift.framework; path = Carthage/Build/iOS/SocketIOClientSwift.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,7 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1D6D4CCF1D48D9BC000A0EAB /* SocketIOClientSwift.framework in Frameworks */,
+				1D6D4CD91D48DCFF000A0EAB /* SocketIOClientSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,7 +58,7 @@
 		1D6D4CAA1D48B85E000A0EAB = {
 			isa = PBXGroup;
 			children = (
-				1D6D4CCE1D48D9BC000A0EAB /* SocketIOClientSwift.framework */,
+				1D6D4CD81D48DCFF000A0EAB /* SocketIOClientSwift.framework */,
 				1D6D4CB51D48B85E000A0EAB /* WebSocket */,
 				1D6D4CB41D48B85E000A0EAB /* Products */,
 			);
@@ -81,6 +96,7 @@
 				1D6D4CAF1D48B85E000A0EAB /* Sources */,
 				1D6D4CB01D48B85E000A0EAB /* Frameworks */,
 				1D6D4CB11D48B85E000A0EAB /* Resources */,
+				1D6D4CDB1D48DCFF000A0EAB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
