@@ -30,6 +30,7 @@ class SocketIOManager : NSObject {
     func listenToUserList(){
         socket.on("userList") { (dataArray, ack) -> Void in
             print("Event received")
+            self.socket.emit("response","hello!")
         }
     }
     
