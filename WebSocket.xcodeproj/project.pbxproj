@@ -13,6 +13,7 @@
 		1D6D4CBE1D48B85E000A0EAB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D6D4CBD1D48B85E000A0EAB /* Assets.xcassets */; };
 		1D6D4CC11D48B85E000A0EAB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1D6D4CBF1D48B85E000A0EAB /* LaunchScreen.storyboard */; };
 		1D6D4CCB1D48B98C000A0EAB /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6D4CCA1D48B98C000A0EAB /* WebSocketManager.swift */; };
+		1D6D4CCF1D48D9BC000A0EAB /* SocketIOClientSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D6D4CCE1D48D9BC000A0EAB /* SocketIOClientSwift.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		1D6D4CC01D48B85E000A0EAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1D6D4CC21D48B85E000A0EAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1D6D4CCA1D48B98C000A0EAB /* WebSocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
+		1D6D4CCE1D48D9BC000A0EAB /* SocketIOClientSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SocketIOClientSwift.framework; path = Carthage/Build/iOS/SocketIOClientSwift.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D6D4CCF1D48D9BC000A0EAB /* SocketIOClientSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +43,7 @@
 		1D6D4CAA1D48B85E000A0EAB = {
 			isa = PBXGroup;
 			children = (
+				1D6D4CCE1D48D9BC000A0EAB /* SocketIOClientSwift.framework */,
 				1D6D4CB51D48B85E000A0EAB /* WebSocket */,
 				1D6D4CB41D48B85E000A0EAB /* Products */,
 			);

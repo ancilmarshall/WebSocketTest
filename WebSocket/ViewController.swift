@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class ViewController: UIViewController {
     
     var socket = WebSocketManager.sharedInstance
@@ -17,15 +16,9 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         socket.establishConnection()
-        socket.sendMessage("Hello")
+        //socket.sendMessage("Hello")
         
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 
 }
 

@@ -7,16 +7,16 @@
 //
 
 import Foundation
-import Starscream
+import SocketIOClientSwift
 
 class WebSocketManager {
     
     static let sharedInstance = WebSocketManager()
-    var socket = WebSocket(url: NSURL(string: "http://192.168.63.38:3000")!)
-
+    var socket: SocketIOClient = SocketIOClient(socketURL: NSURL(string: "http://192.168.63.38:3000")!)
+    
+    
     func establishConnection(){
         socket.connect()
-        socket.delegate = self
     }
     
     func closeConnection(){
@@ -24,9 +24,9 @@ class WebSocketManager {
     }
     
     func sendMessage(msg: String){
-        socket.writeString(msg) { 
-            "message written"
-        }
+//        socket.writeString(msg) { 
+//            "message written"
+//        }
     }
 }
 
