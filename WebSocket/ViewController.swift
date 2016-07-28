@@ -10,12 +10,17 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var socket = SocketIOManager.sharedInstance
+    var socket = StarWebSocketManager.sharedInstance
 
     override func viewDidLoad() {
         super.viewDidLoad()
         socket.establishConnection()
-        socket.sendMessage("Hello")
+        
+//        let jsonStr = "{\"Type\" : \"infos\", \"UserToken\" : \"42\"}"
+//        socket.sendMessage(jsonStr)
+        
+//        let parameters = ["Type":"infos","UserToken":"42"]
+//        socket.sendJSON(parameters)
         
     }
 
