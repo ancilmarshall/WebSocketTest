@@ -8,11 +8,14 @@
 
 import Foundation
 import Starscream
+import ReactiveCocoa
 
 class StarWebSocketManager {
     
     static let sharedInstance = StarWebSocketManager()
     var socket = WebSocket(url: NSURL(string: "http://62.210.217.219/openSocket")!)
+    
+    var speed : MutableProperty<String> = MutableProperty("0")
 
     func establishConnection(){
         socket.delegate = self
@@ -41,6 +44,7 @@ class StarWebSocketManager {
         }
 
     }
+    
 }
 
 
@@ -49,12 +53,11 @@ extension StarWebSocketManager : WebSocketDelegate {
     func websocketDidConnect(socket: WebSocket) {
         print("websocket is connected")
         
-        let parameters = ["Type":"infos","UserToken":"42"]
+        //        let parameters = ["Type":"infos","UserToken":"42"]
+        //        sendCommand(parameters)
+        
+        let parameters = ["Type":"start","UserToken":"42","CarName":"Z4"]
         sendCommand(parameters)
-        
-//        let parameters = ["Type":"start","UserToken":"42","CarName":"Z4"]
-//        sendCommand(parameters)
-        
     }
 
     func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
@@ -66,21 +69,39 @@ extension StarWebSocketManager : WebSocketDelegate {
     }
 
     func websocketDidReceiveMessage(socket: WebSocket, text: String) {
-        print("websocket did receive message: \(text)")
+        //print("websocket did receive message: \(text)")
+        
         
         let data = text.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
         
-        // debug printing
+        
+        // response to the info command
+//        do {
+//            let json = try NSJSONSerialization.JSONObjectWithData(data, options: []) as! [Dictionary<String,AnyObject>]
+//            for item in json {
+//                if let name = item["name"] as? String {
+//                    print(name)
+//                }
+//            }
+//        } catch let error as NSError {
+//            print("Failed to load: \(error.localizedDescription)")
+//        }
+        
+        // response just for a single car
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(data, options: []) as! [Dictionary<String,AnyObject>]
-            for item in json {
-                if let name = item["name"] as? String {
-                    print(name)
-                }
+            let json = try NSJSONSerialization.JSONObjectWithData(data, options: []) as! Dictionary<String,AnyObject>
+            if let currentSpeed = json["Speed"] as? NSNumber {
+                //print(currentSpeed)
+                speed  = MutableProperty(String(format: "%.2f", currentSpeed.doubleValue))
             }
         } catch let error as NSError {
             print("Failed to load: \(error.localizedDescription)")
         }
+        
+        
     }
+    
+    
+    
 
 }
