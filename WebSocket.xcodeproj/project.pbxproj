@@ -19,6 +19,8 @@
 		1D6D4D2E1D4A55F4000A0EAB /* Result.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1D6D4D2C1D4A55F4000A0EAB /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1D6D4D301D4A55FD000A0EAB /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D6D4D2F1D4A55FD000A0EAB /* Starscream.framework */; };
 		1D6D4D311D4A55FD000A0EAB /* Starscream.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1D6D4D2F1D4A55FD000A0EAB /* Starscream.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1D922DA91D4B54D900F8A1AB /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D922DA81D4B54D900F8A1AB /* Util.swift */; };
+		1D922DAB1D4B9B1E00F8A1AB /* CarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D922DAA1D4B9B1E00F8A1AB /* CarModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,6 +51,8 @@
 		1D6D4D281D4A55D1000A0EAB /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
 		1D6D4D2C1D4A55F4000A0EAB /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 		1D6D4D2F1D4A55FD000A0EAB /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
+		1D922DA81D4B54D900F8A1AB /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		1D922DAA1D4B9B1E00F8A1AB /* CarModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,8 +92,10 @@
 			isa = PBXGroup;
 			children = (
 				1D6D4CB61D48B85E000A0EAB /* AppDelegate.swift */,
+				1D922DAA1D4B9B1E00F8A1AB /* CarModel.swift */,
 				1D6D4CB81D48B85E000A0EAB /* ViewController.swift */,
 				1D6D4CDC1D48E2DD000A0EAB /* StarWebSocketManager.swift */,
+				1D922DA81D4B54D900F8A1AB /* Util.swift */,
 				1D6D4CBA1D48B85E000A0EAB /* Main.storyboard */,
 				1D6D4CBD1D48B85E000A0EAB /* Assets.xcassets */,
 				1D6D4CBF1D48B85E000A0EAB /* LaunchScreen.storyboard */,
@@ -171,7 +177,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D6D4CB91D48B85E000A0EAB /* ViewController.swift in Sources */,
+				1D922DAB1D4B9B1E00F8A1AB /* CarModel.swift in Sources */,
 				1D6D4CDD1D48E2DD000A0EAB /* StarWebSocketManager.swift in Sources */,
+				1D922DA91D4B54D900F8A1AB /* Util.swift in Sources */,
 				1D6D4CB71D48B85E000A0EAB /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
