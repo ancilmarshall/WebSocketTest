@@ -92,9 +92,8 @@
 			isa = PBXGroup;
 			children = (
 				1D6D4CB61D48B85E000A0EAB /* AppDelegate.swift */,
-				1D922DAA1D4B9B1E00F8A1AB /* CarModel.swift */,
-				1D6D4CB81D48B85E000A0EAB /* ViewController.swift */,
-				1D6D4CDC1D48E2DD000A0EAB /* StarWebSocketManager.swift */,
+				1D922DAC1D4BA5DF00F8A1AB /* View */,
+				1D922DAD1D4BA5EA00F8A1AB /* ModelViewModel */,
 				1D922DA81D4B54D900F8A1AB /* Util.swift */,
 				1D6D4CBA1D48B85E000A0EAB /* Main.storyboard */,
 				1D6D4CBD1D48B85E000A0EAB /* Assets.xcassets */,
@@ -102,6 +101,23 @@
 				1D6D4CC21D48B85E000A0EAB /* Info.plist */,
 			);
 			path = WebSocket;
+			sourceTree = "<group>";
+		};
+		1D922DAC1D4BA5DF00F8A1AB /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1D6D4CB81D48B85E000A0EAB /* ViewController.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		1D922DAD1D4BA5EA00F8A1AB /* ModelViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				1D922DAA1D4B9B1E00F8A1AB /* CarModel.swift */,
+				1D6D4CDC1D48E2DD000A0EAB /* StarWebSocketManager.swift */,
+			);
+			name = ModelViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

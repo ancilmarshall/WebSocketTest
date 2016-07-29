@@ -16,27 +16,39 @@ enum ServerCmdType {
     case Start
 }
 
+let kWebServerURL = "http://62.210.217.219/openSocket"
+
 class StarWebSocketManager {
-    
-    //TODO: remove
-    let infoOnly = false
-    
+
     static let sharedInstance = StarWebSocketManager()
-    var socket = WebSocket(url: NSURL(string: "http://62.210.217.219/openSocket")!)
+    var socket = WebSocket(url: NSURL(string:kWebServerURL)!)
+    var sockets = Array<WebSocket>()
+    var producers = Array<SignalProducer<(Bool, String, WebSocket, ServerCmdType), NSError>>()
     
     var speed : MutableProperty<String> = MutableProperty("0")
-
-    func establishConnection(){
+    
+    func startSignal(producer: SignalProducer<(Bool, String, WebSocket, ServerCmdType), NSError>){
         
-        let onConnectionSignal = createOnConnectSignal()
-        onConnectionSignal.startWithSignal { (signal, disposable) in
+        producer.startWithSignal { (signal, disposable) in
             
             signal.observe(Signal.Observer { event in
                 switch event {
-                case let .Next( isOk):
+                case let .Next( resp ):
+                    
+                    let isOk = resp.0
+                    let name = resp.1
+                    let socket = resp.2
+                    let type = resp.3
+                    
                     if (isOk){
-                        print("websocket is connected")
-                        self.commandInfo(self.socket)
+                        
+                        if type == .Info {
+                            print("websocket is connected")
+                            self.commandInfo(socket)
+                        } else if type == .Start {
+                            self.commandStart(socket, forCar: name)
+                        }
+                        
                     } else {
                         print("Connection is NOK")
                     }
@@ -49,6 +61,12 @@ class StarWebSocketManager {
                 }
                 })
         }
+    }
+
+    func establishConnection(){
+        
+        let onConnectionSignal = createOnConnectSignal( "info", socket: self.socket, cmdType: .Info)
+        startSignal(onConnectionSignal);
         
         let onTextSignal = createOnTextSignal()
         onTextSignal.startWithSignal { (signal, disposable) in
@@ -56,12 +74,20 @@ class StarWebSocketManager {
             signal.observe(Signal.Observer { event in
                 switch event {
                 case let .Next(resp):
-                    let cmdType = resp.1
                     let data = resp.0
+                    let cmdType = resp.1
                     
                     if (cmdType == .Info){
-                        if let listOfCars = data as? Array<String> {
-                            self.commandStart(self.socket, forCar: listOfCars[0])
+                        if let listOfCars = data as? Array<CarModel> {
+
+                            //self.commandStart(self.socket, forCar: listOfCars[0].name)
+                            let newSocket = WebSocket(url: NSURL(string:kWebServerURL)!)
+                            let newConnectionSignal = self.createOnConnectSignal(listOfCars[0].name , socket: newSocket, cmdType: .Start)
+                            self.startSignal(newConnectionSignal);
+                            self.sockets.append(newSocket)
+                            self.producers.append(newConnectionSignal)
+                            newSocket.connect()
+                            
                         }
                     } else if (cmdType == .Start){
                         if let carSpeed = data as? NSNumber {
@@ -77,14 +103,10 @@ class StarWebSocketManager {
                     print("Interrupted")
                 }
                 })
-
         }
         
-        socket.delegate = self
         socket.connect()
-        
     }
-    
     
     func closeConnection(){
         socket.disconnect()
@@ -119,10 +141,10 @@ class StarWebSocketManager {
     
     //MARK: - Websocket Delegate API as SignalProducers
     
-    func createOnConnectSignal () -> SignalProducer<Bool, NSError> {
+    func createOnConnectSignal (name:String, socket:WebSocket, cmdType: ServerCmdType) -> SignalProducer<(Bool, String, WebSocket, ServerCmdType), NSError> {
         return SignalProducer { (observer, disposable) in
             self.socket.onConnect = {
-                observer.sendNext(true)
+                observer.sendNext((true,name,socket,cmdType))
                 observer.sendCompleted()
             }
         }
@@ -135,7 +157,7 @@ class StarWebSocketManager {
             // lift the closure
             self.socket.onText = { text in
                 let data = text.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
-                var names = Array<String>()
+                var cars = Array<CarModel>()
                 
                 do {
                     let json = try NSJSONSerialization.JSONObjectWithData(data, options: [])
@@ -144,12 +166,18 @@ class StarWebSocketManager {
                     if json is [Dictionary<String,AnyObject>] {
                         let jsonData = json as! [Dictionary<String,AnyObject>]
                         for item in jsonData {
-                            if let name = item["name"] as? String {
-                                names.append(name)
-                            }
+                            
+                            //TODO: Use guard instead of as!
+                            let name = item["name"] as! String
+                            let brand = item["brand"] as! String
+                            let power = item["power"] as! Int
+                            let maxSpeed = item["maxSpeed"] as! Int
+                            
+                            let car = CarModel(name: name, brand:brand, power: power, maxSpeed: maxSpeed, currentSpeed: nil)
+                            cars.append(car)
                         }
                         
-                        observer.sendNext((names,ServerCmdType.Info))
+                        observer.sendNext((cars,ServerCmdType.Info))
                         //observer.sendCompleted()
                         
                     } else if json is Dictionary<String,AnyObject> {
@@ -169,20 +197,19 @@ class StarWebSocketManager {
 }
 
 //MARK:- WebSocket Delegate
-
-extension StarWebSocketManager : WebSocketDelegate {
-    func websocketDidConnect(socket: WebSocket) {
-    }
-
-    func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
-        print("websocket did disconnect with error: \(error?.localizedDescription)")
-    }
-
-    func websocketDidReceiveData(socket: WebSocket, data: NSData) {
-        print("websocket did receive data")
-    }
-
-    func websocketDidReceiveMessage(socket: WebSocket, text: String) {
-    }
-
-}
+//
+//extension StarWebSocketManager : WebSocketDelegate {
+//    func websocketDidConnect(socket: WebSocket) {
+//    }
+//
+//    func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
+//        print("websocket did disconnect with error: \(error?.localizedDescription)")
+//    }
+//
+//    func websocketDidReceiveData(socket: WebSocket, data: NSData) {
+//        print("websocket did receive data")
+//    }
+//
+//    func websocketDidReceiveMessage(socket: WebSocket, text: String) {
+//    }
+//}

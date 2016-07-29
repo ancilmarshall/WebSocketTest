@@ -8,12 +8,21 @@
 
 import Foundation
 
-struct CarModel {
+class CarModel {
     
     let name: String
     let brand: String
     let power: Int
     let maxSpeed: Int
     let currentSpeed: Double?
+    
+    init(name:String, brand: String, power: Int, maxSpeed:Int, currentSpeed:Double?)
+    {
+        self.name = name
+        self.brand = brand
+        self.power = power
+        self.maxSpeed = maxSpeed
+        self.currentSpeed = currentSpeed
+    }
     
 }
