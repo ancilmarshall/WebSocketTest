@@ -27,83 +27,19 @@ class StarWebSocketManager {
     
     var speed : MutableProperty<String> = MutableProperty("0")
     
-    func startSignal(producer: SignalProducer<(Bool, String, WebSocket, ServerCmdType), NSError>){
-        
-        producer.startWithSignal { (signal, disposable) in
-            
-            signal.observe(Signal.Observer { event in
-                switch event {
-                case let .Next( resp ):
-                    
-                    let isOk = resp.0
-                    let name = resp.1
-                    let socket = resp.2
-                    let type = resp.3
-                    
-                    if (isOk){
-                        
-                        if type == .Info {
-                            print("websocket is connected")
-                            self.commandInfo(socket)
-                        } else if type == .Start {
-                            self.commandStart(socket, forCar: name)
-                        }
-                        
-                    } else {
-                        print("Connection is NOK")
-                    }
-                case let .Failed(error):
-                    print("Failed: \(error)")
-                case .Completed:
-                    print("Completed")
-                case .Interrupted:
-                    print("Interrupted")
-                }
-                })
-        }
-    }
-
+    //MARK: - WebSocketManager API
+    
+    //addSocket
+    //removeSocket
+    //
+    
     func establishConnection(){
         
         let onConnectionSignal = createOnConnectSignal( "info", socket: self.socket, cmdType: .Info)
-        startSignal(onConnectionSignal);
+        startOnConnectSignal(onConnectionSignal);
         
-        let onTextSignal = createOnTextSignal()
-        onTextSignal.startWithSignal { (signal, disposable) in
-
-            signal.observe(Signal.Observer { event in
-                switch event {
-                case let .Next(resp):
-                    let data = resp.0
-                    let cmdType = resp.1
-                    
-                    if (cmdType == .Info){
-                        if let listOfCars = data as? Array<CarModel> {
-
-                            //self.commandStart(self.socket, forCar: listOfCars[0].name)
-                            let newSocket = WebSocket(url: NSURL(string:kWebServerURL)!)
-                            let newConnectionSignal = self.createOnConnectSignal(listOfCars[0].name , socket: newSocket, cmdType: .Start)
-                            self.startSignal(newConnectionSignal);
-                            self.sockets.append(newSocket)
-                            self.producers.append(newConnectionSignal)
-                            newSocket.connect()
-                            
-                        }
-                    } else if (cmdType == .Start){
-                        if let carSpeed = data as? NSNumber {
-                            self.speed.swap(String(format: "%.2f",carSpeed.doubleValue))
-                        }
-                    }
-                    
-                case let .Failed(error):
-                    print("Failed: \(error)")
-                case .Completed:
-                    print("Completed")
-                case .Interrupted:
-                    print("Interrupted")
-                }
-                })
-        }
+        let onTextSignal = createOnTextSignal("start",self.socket,cmdType:.Info)
+        startOnTextSignal(onTextSignal)
         
         socket.connect()
     }
@@ -113,7 +49,7 @@ class StarWebSocketManager {
     }
     
     func sendMessage(msg: String){
-        socket.writeString(msg) { 
+        socket.writeString(msg) {
             print("Message sent")
         }
     }
@@ -139,34 +75,76 @@ class StarWebSocketManager {
         sendCommand(command, toSocket: socket)
     }
     
-    //MARK: - Websocket Delegate API as SignalProducers
+    //MARK:- Sinks when signal events are received
     
-    func createOnConnectSignal (name:String, socket:WebSocket, cmdType: ServerCmdType) -> SignalProducer<(Bool, String, WebSocket, ServerCmdType), NSError> {
-        return SignalProducer { (observer, disposable) in
-            self.socket.onConnect = {
-                observer.sendNext((true,name,socket,cmdType))
-                observer.sendCompleted()
-            }
+    func startOnConnectSignal(producer: SignalProducer<(Bool, String, WebSocket, ServerCmdType), NSError>){
+        
+        producer.startWithSignal { (signal, disposable) in
+            
+            signal.observe(Signal.Observer { event in
+                switch event {
+                case let .Next( resp ):
+                    
+                    let isOk = resp.isOk
+                    let name = resp.name
+                    let socket = resp.socket
+                    let type = resp.type
+                    
+                    if (isOk){
+                        
+                        if type == .Info {
+                            print("websocket is connected")
+                            self.commandInfo(socket)
+                        } else if type == .Start {
+                            self.commandStart(socket, forCar: name)
+                        }
+                        
+                    } else {
+                        print("Connection is NOK")
+                    }
+                case let .Failed(error):
+                    print("Failed: \(error)")
+                case .Completed:
+                    print("Completed")
+                case .Interrupted:
+                    print("Interrupted")
+                }
+                })
         }
     }
     
-    func createOnTextSignal () -> SignalProducer<(AnyObject,ServerCmdType),NSError>{
+    
+    func startOnTextSignal(producer: SignalProducer<(String, String, WebSocket,ServerCmdType),NSError>){
         
-        return SignalProducer { (observer, disposable) in
+        producer.startWithSignal { (signal, disposable) in
             
-            // lift the closure
-            self.socket.onText = { text in
-                let data = text.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
-                var cars = Array<CarModel>()
-                
-                do {
-                    let json = try NSJSONSerialization.JSONObjectWithData(data, options: [])
+            signal.observe(Signal.Observer { event in
+                switch event {
+                case let .Next(resp):
+                    let text = resp.text
+                    let name = resp.name
+                    let socket = resp.socket
+                    let type = resp.type
                     
-                    // need to do a better job here to know which command type was executed (without using a saved boolean)
-                    if json is [Dictionary<String,AnyObject>] {
+                    
+                    let data = text.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+                    var json: AnyObject
+                    
+                    //can I use guard here instead so that I escape right away?
+                    do {
+                        json = try NSJSONSerialization.JSONObjectWithData(data, options: [])
+                    } catch let error as NSError {
+                        print("Failed to serialize json object : \(error.localizedDescription)")
+                    }
+                    
+                    switch type {
+                        
+                    case .Info:
                         let jsonData = json as! [Dictionary<String,AnyObject>]
+                        
+                        var cars = Array<CarModel>()
+                        
                         for item in jsonData {
-                            
                             //TODO: Use guard instead of as!
                             let name = item["name"] as! String
                             let brand = item["brand"] as! String
@@ -175,41 +153,83 @@ class StarWebSocketManager {
                             
                             let car = CarModel(name: name, brand:brand, power: power, maxSpeed: maxSpeed, currentSpeed: nil)
                             cars.append(car)
+                            
+                            let newSocket = WebSocket(url: NSURL(string:kWebServerURL)!)
+                            let newConnectionSignal = self.createOnConnectSignal(car.name , socket: newSocket, cmdType: .Start)
+                            self.startOnConnectSignal(newConnectionSignal);
+                            let newTextSignal = self.createOnTextSignal(car.name, socket:newSocket, cmdType: .Start)
+                            self.startOnTextSignal(newTextSignal)
+                            self.sockets.append(newSocket)
+                            self.producers.append(newConnectionSignal)
+                            newSocket.connect()
                         }
-                        
-                        observer.sendNext((cars,ServerCmdType.Info))
-                        //observer.sendCompleted()
-                        
-                    } else if json is Dictionary<String,AnyObject> {
+            
+                    case .Start:
+                        // change the as! to an if let or guard
                         let jsonData = json as! Dictionary<String,AnyObject>
-                        if let currentSpeed = jsonData["Speed"] as? NSNumber {
-                            observer.sendNext((currentSpeed,ServerCmdType.Start))
-                            //observer.sendCompleted()
-                        }
+                        if let carSpeed = jsonData["Speed"] as? NSNumber {
+                                //return this self.speed as a return value instead
+                                //this is not self.speed, but a car.speed
+                                self.speed.swap(String(format: "%.2f",carSpeed.doubleValue))
+                            }
+                    default:
+                        print("Unknown SocketCmdType")
                     }
-                    
-                } catch let error as NSError {
-                    print("Failed to load: \(error.localizedDescription)")
+            
+                case let .Failed(error):
+                    print("Failed: \(error)")
+                case .Completed:
+                    print("Completed")
+                case .Interrupted:
+                    print("Interrupted")
                 }
+            })
+        }
+        
+    }
+
+
+    
+    //MARK: - Websocket Delegate API as SignalProducers
+    //TODO: put these in a Protocol
+    func createOnConnectSignal (name:String, socket:WebSocket, cmdType: ServerCmdType)
+        -> SignalProducer<(isOk: Bool, name: String, socket: WebSocket, type: ServerCmdType), NSError> {
+        return SignalProducer { (observer, disposable) in
+            socket.onConnect = {
+                observer.sendNext((true,name,socket,cmdType))
+                observer.sendCompleted()
+            }
+        }
+    }
+    
+    func createOnTextSignal (name:String, socket:Websocket, cmdType: ServerCmdType)
+        -> SignalProducer<(text: String, name: String, socket: WebSocket,type: ServerCmdType),NSError>{
+        return SignalProducer { (observer, disposable) in
+            socket.onText = { text in
+                observer.sendNext((text,name,socket,cmdType))
+                //observer.sendCompleted() // not sure when to use this
+            }
+        }
+    }
+    
+    func createOnDataSignal (name:String, socket:Websocket, cmdType: ServerCmdType)
+        -> SignalProducer<(data:NSData, name:String, socket: WebSocket, type: ServerCmdType),NSError>{
+        return SignalProducer { (observer, disposable) in
+            socket.onData = { data in
+                observer.sendNext((data,name,socket,cmdType))
+                //observer.sendCompleted() //not sure when to use this
+            }
+        }
+    }
+    
+    func createOnDisconnectSignal (name:String, socket:Websocket )
+        -> SignalProducer<(isOK: Bool, name: String, socket: Websocket), NSError>{
+        return SignalProducer { (observer, disposable) in
+            socket.onDisconnect = { error in
+                observer.sendNext((true,name,socket))
+                observer.sendCompleted()
             }
         }
     }
 }
 
-//MARK:- WebSocket Delegate
-//
-//extension StarWebSocketManager : WebSocketDelegate {
-//    func websocketDidConnect(socket: WebSocket) {
-//    }
-//
-//    func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
-//        print("websocket did disconnect with error: \(error?.localizedDescription)")
-//    }
-//
-//    func websocketDidReceiveData(socket: WebSocket, data: NSData) {
-//        print("websocket did receive data")
-//    }
-//
-//    func websocketDidReceiveMessage(socket: WebSocket, text: String) {
-//    }
-//}
